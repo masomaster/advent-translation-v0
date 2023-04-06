@@ -17,12 +17,13 @@ New to me:
 - Jest/Mocha
 - Redux
 - Firebase
+- PocketBase?
 - Various smaller libraries for features and styling
 
 Familiar to me includes:
 
 - React
-- MongoDB
+- MongoDB (or maybe not, if I go with PocketBase)
 - Node.js
 - Express
 
