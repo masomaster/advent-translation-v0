@@ -30,17 +30,22 @@ export async function getStaticPaths() {
 }
 
 export default function Day({ dayData }: { dayData: any }) {
-  const [hebrewTranslation, setHebrewTranslation] = useState(null);
-  const [greekTranslation, setGreekTranslation] = useState(null);
+  const [translations, setTranslations] = useState({ hebrew: "", greek: "" });
 
   // Gets and sets user's existing translations for the day
+  // This might be over-engineered, but as far as I can tell from the docs,
+  // this is how it's supposed to be.
+  // Can revisit later.
   useEffect(() => {
     (async function getDayTranslations() {
       const translationData = await pb
         .collection("translations")
-        .getFirstListItem(`day='${dayData.dayNumber}'`);
-      setHebrewTranslation(translationData.hebrew);
-      setGreekTranslation(translationData.greek);
+        .getFirstListItem(`day='${dayData.dayNumber}'`, { $autoCancel: false });
+      const updatedTranslationData = {
+        hebrew: translationData.hebrew,
+        greek: translationData.greek,
+      };
+      setTranslations(updatedTranslationData);
     })();
   }, [dayData.dayNumber]);
 
@@ -53,7 +58,9 @@ export default function Day({ dayData }: { dayData: any }) {
       </p>
       <p>
         Your translation:{" "}
-        {hebrewTranslation ? hebrewTranslation : "None yet. Give it a shot!"}
+        {translations?.hebrew
+          ? translations.hebrew
+          : "None yet. Give it a shot!"}
       </p>
       <p>
         Greek: <span className="greek">{dayData.greek}</span> from{" "}
@@ -61,7 +68,7 @@ export default function Day({ dayData }: { dayData: any }) {
       </p>
       <p>
         Your translation:{" "}
-        {greekTranslation ? greekTranslation : "None yet. Give it a shot!"}
+        {translations?.greek ? translations.greek : "None yet. Give it a shot!"}
       </p>
     </div>
   );
