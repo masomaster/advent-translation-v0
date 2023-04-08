@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getDayData, getNumOfDays } from "../../../lib/days";
 import PocketBase from "pocketbase";
+import useSWR from "swr";
 
 const pb = new PocketBase("http://127.0.0.1:8090");
 
@@ -31,29 +32,20 @@ export async function getStaticPaths() {
 
 export default function Day({ dayData }: { dayData: any }) {
   const [profile, setProfile] = useState("1urs7uguurwwzf7");
-  const [translations, setTranslations] = useState({ hebrew: "", greek: "" });
 
   // Gets and sets user's existing translations for the day
-  // This might be over-engineered, but as far as I can tell from the docs,
-  // this is how it's supposed to be.
-  // Can revisit later.
-  useEffect(() => {
-    (async function getDayTranslations() {
-      const translationData = await pb
+  const { data, isLoading } = useSWR(
+    "/getTranslations",
+    async () =>
+      await pb
         .collection("translations")
         .getFirstListItem(
           `day='${dayData.dayNumber}'` && `profile='${profile}'`,
           {
             $autoCancel: false,
           }
-        );
-      const updatedTranslationData = {
-        hebrew: translationData.hebrew,
-        greek: translationData.greek,
-      };
-      setTranslations(updatedTranslationData);
-    })();
-  }, [dayData.dayNumber, profile]);
+        )
+  );
 
   return (
     <div>
@@ -64,8 +56,10 @@ export default function Day({ dayData }: { dayData: any }) {
       </p>
       <p>
         Your translation:{" "}
-        {translations?.hebrew
-          ? translations.hebrew
+        {isLoading
+          ? "Loading..."
+          : data?.hebrew
+          ? data.hebrew
           : "None yet. Give it a shot!"}
       </p>
       <p>
@@ -74,7 +68,11 @@ export default function Day({ dayData }: { dayData: any }) {
       </p>
       <p>
         Your translation:{" "}
-        {translations?.greek ? translations.greek : "None yet. Give it a shot!"}
+        {isLoading
+          ? "Loading..."
+          : data?.greek
+          ? data.greek
+          : "None yet. Give it a shot!"}{" "}
       </p>
     </div>
   );
