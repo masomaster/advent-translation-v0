@@ -1,10 +1,12 @@
-# Advent Translation
+# Advent Translation - Version 0
 
 ## About
 
 This is a project, modeled after [Advent of Code](https://adventofcode.com/), providing 25 days of translation practice from Hebrew and Greek verses in the Bible. It is currently in the planning and prototyping stages.
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+As version 0, this is for prototyping, proof-of-concept, and testing out new technologies.
 
 ## Technologies
 
