@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getDayData, getNumOfDays } from "../../../lib/days";
 import PocketBase from "pocketbase";
 import useSWR from "swr";
@@ -30,7 +30,17 @@ export async function getStaticPaths() {
   };
 }
 
-export default function Day({ dayData }: { dayData: any }) {
+// I'm told generateStaticParams effectively replaces getStaticPaths (above), but I haven't gotten it to work yet.
+// Statically generates routes at build time instead of on-demand at request time.
+// export async function generateStaticParams() {
+//   const pathsToPreRender = [...Array(25).keys()];
+
+//   return pathsToPreRender.map((n) => ({
+//     slug: n + 1,
+//   }));
+// }
+
+export default function Page({ dayData }: { dayData: any }) {
   const [profile, setProfile] = useState("1urs7uguurwwzf7");
 
   // Gets and sets user's existing translations for the day
