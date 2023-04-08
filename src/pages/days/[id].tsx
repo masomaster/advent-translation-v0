@@ -30,6 +30,7 @@ export async function getStaticPaths() {
 }
 
 export default function Day({ dayData }: { dayData: any }) {
+  const [profile, setProfile] = useState("1urs7uguurwwzf7");
   const [translations, setTranslations] = useState({ hebrew: "", greek: "" });
 
   // Gets and sets user's existing translations for the day
@@ -40,14 +41,19 @@ export default function Day({ dayData }: { dayData: any }) {
     (async function getDayTranslations() {
       const translationData = await pb
         .collection("translations")
-        .getFirstListItem(`day='${dayData.dayNumber}'`, { $autoCancel: false });
+        .getFirstListItem(
+          `day='${dayData.dayNumber}'` && `profile='${profile}'`,
+          {
+            $autoCancel: false,
+          }
+        );
       const updatedTranslationData = {
         hebrew: translationData.hebrew,
         greek: translationData.greek,
       };
       setTranslations(updatedTranslationData);
     })();
-  }, [dayData.dayNumber]);
+  }, [dayData.dayNumber, profile]);
 
   return (
     <div>
