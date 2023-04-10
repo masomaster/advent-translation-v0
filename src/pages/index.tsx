@@ -5,6 +5,9 @@ import { Inter } from "next/font/google";
 import Link from "next/link";
 import { getNumOfDays } from "../../lib/days";
 import { GetStaticProps } from "next";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { incrementLatestDay, setWholeProfile } from "@/profileSlice";
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const numOfDays = getNumOfDays();
@@ -16,8 +19,24 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 export default function Home({ numOfDays }: { numOfDays: number }) {
+  const profileData = useSelector((state: RootState) => state.profile);
+  const dispatch = useDispatch();
   // create an array of numbers from 1 to numOfDays
   const daysArray1 = [...Array(numOfDays).keys()].map((n) => n + 1);
+
+  const dummyProfile = {
+    firebaseID: "1urs7uguurwwzf7",
+    firstName: "Mason",
+    lastName: "Lancaster",
+    latestDay: 3,
+    preferredTranslation: "NRSV",
+  };
+
+  const handleButtonClick = () => {
+    dispatch(setWholeProfile(dummyProfile));
+    dispatch(incrementLatestDay());
+    console.log("clicked!");
+  };
 
   return (
     <>
@@ -31,7 +50,10 @@ export default function Home({ numOfDays }: { numOfDays: number }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
-        <h1>Welcome to Advent Translation!</h1>
+        <h1>
+          Welcome to Advent Translation{`, ${profileData.firstName}`}, you are
+          on day {profileData.latestDay}!
+        </h1>
         {daysArray1.map((n) => (
           <div className="day-link" key={n}>
             <Link href={`/days/${n}`} key={n}>
@@ -40,6 +62,10 @@ export default function Home({ numOfDays }: { numOfDays: number }) {
           </div>
         ))}
       </div>
+      <button onClick={handleButtonClick}>Set Profile</button>
+      <button onClick={() => dispatch(incrementLatestDay())}>
+        Increment LatestDay
+      </button>
     </>
   );
 }
