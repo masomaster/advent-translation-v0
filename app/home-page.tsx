@@ -1,26 +1,20 @@
+"use client";
+
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 // import styles from "@/styles/Home.module.css";
 import Link from "next/link";
-import { getNumOfDays } from "../../lib/days";
 import { GetStaticProps } from "next";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store";
-import { incrementLatestDay, setWholeProfile } from "@/profileSlice";
+import { RootState } from "../redux/store";
+import { incrementLatestDay, setWholeProfile } from "../redux/profileSlice";
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const numOfDays = getNumOfDays();
-  return {
-    props: {
-      numOfDays,
-    },
-  };
-};
-
-export default function Home({ numOfDays }: { numOfDays: number }) {
+export default function HomePage({ numOfDays }: { numOfDays: number }) {
   const profileData = useSelector((state: RootState) => state.profile);
   const dispatch = useDispatch();
+
+  // THIS WILL EVENTUALLY BE REPLACED WITH A DATABASE QUERY
   // create an array of numbers from 1 to numOfDays
   const daysArray1 = [...Array(numOfDays).keys()].map((n) => n + 1);
 
@@ -30,12 +24,6 @@ export default function Home({ numOfDays }: { numOfDays: number }) {
     lastName: "Lancaster",
     latestDay: 3,
     preferredTranslation: "NRSV",
-  };
-
-  const handleButtonClick = () => {
-    dispatch(setWholeProfile(dummyProfile));
-    dispatch(incrementLatestDay());
-    console.log("clicked!");
   };
 
   return (
@@ -62,7 +50,9 @@ export default function Home({ numOfDays }: { numOfDays: number }) {
           </div>
         ))}
       </div>
-      <button onClick={handleButtonClick}>Set Profile</button>
+      <button onClick={() => dispatch(setWholeProfile(dummyProfile))}>
+        Set Profile
+      </button>
       <button onClick={() => dispatch(incrementLatestDay())}>
         Increment LatestDay
       </button>
