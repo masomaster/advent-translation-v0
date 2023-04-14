@@ -2,11 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   firebaseID: "",
-  firstName: "John",
+  firstName: "",
   lastName: "",
   latestDay: 1,
   preferredTranslation: "",
-  test: true,
 };
 
 export const profileSlice = createSlice({

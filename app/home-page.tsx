@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
@@ -10,21 +11,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { incrementLatestDay, setWholeProfile } from "../redux/profileSlice";
 
-export default function HomePage({ numOfDays }: { numOfDays: number }) {
+export default function HomePage({
+  numOfDays,
+  profile,
+}: {
+  numOfDays: number;
+  profile: any;
+}) {
   const profileData = useSelector((state: RootState) => state.profile);
   const dispatch = useDispatch();
 
-  // THIS WILL EVENTUALLY BE REPLACED WITH A DATABASE QUERY
-  // create an array of numbers from 1 to numOfDays
-  const daysArray1 = [...Array(numOfDays).keys()].map((n) => n + 1);
+  useEffect(() => {
+    dispatch(setWholeProfile(profile));
+  }, [profile, dispatch]);
 
-  const dummyProfile = {
-    firebaseID: "1urs7uguurwwzf7",
-    firstName: "Mason",
-    lastName: "Lancaster",
-    latestDay: 3,
-    preferredTranslation: "NRSV",
-  };
+  // Creates an array of numbers from 1 to the user's latest translation day
+  const numOfDaysToDisplay = Math.min(numOfDays, profileData.latestDay);
+  const daysArray = [...Array(numOfDaysToDisplay).keys()].map((n) => n + 1);
 
   return (
     <>
@@ -39,10 +42,11 @@ export default function HomePage({ numOfDays }: { numOfDays: number }) {
       </Head>
       <div>
         <h1>
-          Welcome to Advent Translation{`, ${profileData.firstName}`}, you are
-          on day {profileData.latestDay}!
+          Welcome to Advent Translation
+          {profileData.firstName.length > 0 && `, ${profileData.firstName}`},
+          you are on day {profileData.latestDay}!
         </h1>
-        {daysArray1.map((n) => (
+        {daysArray.map((n) => (
           <div className="day-link" key={n}>
             <Link href={`/days/${n}`} key={n}>
               Day {n}
@@ -50,9 +54,6 @@ export default function HomePage({ numOfDays }: { numOfDays: number }) {
           </div>
         ))}
       </div>
-      <button onClick={() => dispatch(setWholeProfile(dummyProfile))}>
-        Set Profile
-      </button>
       <button onClick={() => dispatch(incrementLatestDay())}>
         Increment LatestDay
       </button>
