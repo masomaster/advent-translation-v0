@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Providers } from "../redux/provider";
+import { AuthContextProvider } from "../context/AuthContext";
 
 export const metadata = {
   title: "Advent Translator",
@@ -17,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <AuthContextProvider>
+          <Providers>{children}</Providers>
+        </AuthContextProvider>
       </body>
     </html>
   );

@@ -10,6 +10,8 @@ import { GetStaticProps } from "next";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { incrementLatestDay, setWholeProfile } from "../redux/profileSlice";
+import { useAuthContext } from "../context/AuthContext";
+import { getAuth, signOut } from "firebase/auth";
 
 export default function HomePage({
   numOfDays,
@@ -20,6 +22,10 @@ export default function HomePage({
 }) {
   const profileData = useSelector((state: RootState) => state.profile);
   const dispatch = useDispatch();
+  const { user } = useAuthContext();
+  const auth = getAuth();
+
+  console.log(user);
 
   useEffect(() => {
     dispatch(setWholeProfile(profile));
@@ -28,6 +34,16 @@ export default function HomePage({
   // Creates an array of numbers from 1 to the user's latest translation day
   const numOfDaysToDisplay = Math.min(numOfDays, profileData.latestDay);
   const daysArray = [...Array(numOfDaysToDisplay).keys()].map((n) => n + 1);
+
+  function handleSignOut() {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  }
 
   return (
     <>
@@ -57,6 +73,12 @@ export default function HomePage({
       <button onClick={() => dispatch(incrementLatestDay())}>
         Increment LatestDay
       </button>
+      <br />
+      <Link href="/auth/signin">Sign In</Link>
+      <br />
+      <Link href="/auth/signup">Sign Up</Link>
+      <br />
+      <button onClick={handleSignOut}>Sign Out</button>
     </>
   );
 }
