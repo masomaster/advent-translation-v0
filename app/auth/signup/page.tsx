@@ -3,7 +3,7 @@ import React from "react";
 import signUp from "../../../firebase/auth/signUp";
 import { useRouter } from "next/navigation";
 
-function Page() {
+export default function SignUp() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const router = useRouter();
@@ -54,5 +54,3 @@ function Page() {
     </div>
   );
 }
-
-export default Page;

@@ -8,10 +8,11 @@ import { Inter } from "next/font/google";
 import Link from "next/link";
 import { GetStaticProps } from "next";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { incrementLatestDay, setWholeProfile } from "../redux/profileSlice";
-import { useAuthContext } from "../context/AuthContext";
+import { RootState } from "../../redux/store";
+import { incrementLatestDay, setWholeProfile } from "../../redux/profileSlice";
+import { useAuthContext } from "../../context/AuthContext";
 import { getAuth, signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 export default function HomePage({
   numOfDays,
@@ -23,9 +24,13 @@ export default function HomePage({
   const profileData = useSelector((state: RootState) => state.profile);
   const dispatch = useDispatch();
   const { user } = useAuthContext();
-  const auth = getAuth();
-
   console.log(user);
+  const auth = getAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user == null) router.push("/");
+  }, [user, router]);
 
   useEffect(() => {
     dispatch(setWholeProfile(profile));
@@ -73,10 +78,6 @@ export default function HomePage({
       <button onClick={() => dispatch(incrementLatestDay())}>
         Increment LatestDay
       </button>
-      <br />
-      <Link href="/auth/signin">Sign In</Link>
-      <br />
-      <Link href="/auth/signup">Sign Up</Link>
       <br />
       <button onClick={handleSignOut}>Sign Out</button>
     </>

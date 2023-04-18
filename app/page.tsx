@@ -1,19 +1,23 @@
-import HomePage from "./home-page";
-import { getNumOfDays } from "../lib/days";
+"use client";
 
-async function getProfile() {
-  const res = await fetch(
-    "http://127.0.0.1:8090/api/collections/profiles/records/1urs7uguurwwzf7"
+import NoUserHome from "./auth/page";
+import SignIn from "./auth/signin/page";
+import SignUp from "./auth/signup/page";
+import { useAuthContext } from "../context/AuthContext";
+import { useRouter } from "next/navigation";
+
+export default function Page() {
+  const { user } = useAuthContext();
+  console.log(user);
+  const router = useRouter();
+
+  if (user) router.push("/dashboard");
+
+  return (
+    <>
+      <NoUserHome />
+      <SignIn />
+      <SignUp />
+    </>
   );
-  const data = await res.json();
-  return data;
-}
-
-export default async function Page() {
-  // Fetch data directly in Server Component
-  const numOfDays = getNumOfDays();
-  const profileData = await getProfile();
-  console.log({ profileData });
-  // Forward fetched data to Client Component
-  return <HomePage numOfDays={numOfDays} profile={profileData} />;
 }

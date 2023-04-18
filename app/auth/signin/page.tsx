@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import signIn from "../../../firebase/auth/signUp";
+import signIn from "../../../firebase/auth/signIn";
 import { useRouter } from "next/navigation";
 
-function Page() {
+export default function SignIn() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const router = useRouter();
@@ -19,12 +19,12 @@ function Page() {
 
     // else successful
     console.log(result);
-    return router.push("/admin");
+    return router.push("/dashboard");
   };
   return (
     <div className="wrapper">
       <div className="form-wrapper">
-        <h1 className="mt-60 mb-30">Sign up</h1>
+        <h1 className="mt-60 mb-30">Sign In</h1>
         <form onSubmit={handleForm} className="form">
           <label htmlFor="email">
             <p>Email</p>
@@ -48,11 +48,9 @@ function Page() {
               placeholder="password"
             />
           </label>
-          <button type="submit">Sign up</button>
+          <button type="submit">Sign in</button>
         </form>
       </div>
     </div>
   );
 }
-
-export default Page;
