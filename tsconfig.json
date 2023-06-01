@@ -30,7 +30,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/days/[id]/page.jsx",
-    "lib/days.js"
+    "lib/days.js",
+    "app/page.tsx",
+    "app/auth/signup/page.jsx"
   ],
   "exclude": ["node_modules"]
 }

@@ -21,13 +21,18 @@ export default function HomePage({
   numOfDays: number;
   profile: any;
 }) {
+  // Getting necessary variables
   const profileData = useSelector((state: RootState) => state.profile);
   const dispatch = useDispatch();
   const { user } = useAuthContext();
-  console.log(user);
+  console.log("user", user);
   const auth = getAuth();
   const router = useRouter();
+  // Creates an array of numbers from 1 to the user's latest translation day
+  const numOfDaysToDisplay = Math.min(numOfDays, profileData.latestDay);
+  const daysArray = [...Array(numOfDaysToDisplay).keys()].map((n) => n + 1);
 
+  // useEffects
   useEffect(() => {
     if (user == null) router.push("/");
   }, [user, router]);
@@ -36,10 +41,7 @@ export default function HomePage({
     dispatch(setWholeProfile(profile));
   }, [profile, dispatch]);
 
-  // Creates an array of numbers from 1 to the user's latest translation day
-  const numOfDaysToDisplay = Math.min(numOfDays, profileData.latestDay);
-  const daysArray = [...Array(numOfDaysToDisplay).keys()].map((n) => n + 1);
-
+  // Functions
   function handleSignOut() {
     signOut(auth)
       .then(() => {
@@ -50,6 +52,7 @@ export default function HomePage({
       });
   }
 
+  // Page
   return (
     <>
       <Head>
