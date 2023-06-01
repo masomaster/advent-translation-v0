@@ -9,6 +9,7 @@ import addData from "../../../firebase/firestore/addData";
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [preferredTranslation, setPreferredTranslation] = useState("NIV");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -17,25 +18,31 @@ export default function SignUp() {
     event.preventDefault();
 
     try {
-      const { result, error } = await signUp(email, password);
-      console.log("new user firebase id: ", result.user.uid);
+      const { credentials, error } = await signUp(
+        firstName,
+        lastName,
+        preferredTranslation,
+        email,
+        password
+      );
+      // console.log("new user firebase id: ", credentials.user.uid);
 
       // create new profile object to push to db
-      const profileData = {
-        firstName: firstName,
-        lastName: lastName,
-        firebaseId: result.user.uid,
-        latestDay: 1,
-        preferredTranslation: "NRSV",
-      };
-      console.log(profileData);
+      // const profileData = {
+      //   firstName: firstName,
+      //   lastName: lastName,
+      //   // firebaseId: credentials.user.uid,
+      //   latestDay: 1,
+      //   preferredTranslation: "NRSV",
+      // };
+      // console.log(profileData);
 
       // Save profile to db
-      const { newFirestoreProfile, error2 } = await addData(
-        "profiles",
-        profileData
-      );
-      console.log("newFirestoreProfile", newFirestoreProfile);
+      // const { newFirestoreProfile, error2 } = await addData(
+      //   "profiles",
+      //   profileData
+      // );
+      // console.log("newFirestoreProfile", newFirestoreProfile);
       // setWholeProfile -- that is, push new returned profile data to Redux store (or Context or whatever I'm using)
       // dispatch(setWholeProfile(profile));
 

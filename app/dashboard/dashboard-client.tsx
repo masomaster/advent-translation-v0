@@ -25,7 +25,7 @@ export default function HomePage({
   const profileData = useSelector((state: RootState) => state.profile);
   const dispatch = useDispatch();
   const { user } = useAuthContext();
-  console.log("user", user);
+  // console.log("user", user);
   const auth = getAuth();
   const router = useRouter();
   // Creates an array of numbers from 1 to the user's latest translation day
