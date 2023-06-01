@@ -1,6 +1,25 @@
 import HomePage from "./dashboard-client";
 import { getNumOfDays } from "../../lib/days";
 import getDocument from "../../firebase/firestore/getData";
+import firebase_app from "../../firebase/config";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+// const auth = getAuth(firebase_app);
+
+// let uid = null;
+// onAuthStateChanged(auth, (user) => {
+//   if (user) {
+//     // User is signed in, see docs for a list of available properties
+//     // https://firebase.google.com/docs/reference/js/auth.user
+//     uid = user.uid;
+//     console.log("user: ", user);
+//     // ...
+//   } else {
+//     // User is signed out
+//     // ...
+//     console.log("no user found");
+//   }
+// });
 
 async function getProfile() {
   // The Pocketbase solution:
@@ -10,16 +29,19 @@ async function getProfile() {
   const data = await res.json();
   return data; */
   // The Cloud Firestore solution:
-  const profile = await getDocument("profiles", "ZoEMHTUnNSY735bW859u");
+  // const profile = await getDocument("profiles", "ZoEMHTUnNSY735bW859u");
   // console.log("firebase profile", profile);
-  return profile;
+  // return profile;
+  // const profile = await getDocument("profiles", uid);
+  // return profile;
 }
 
 export default async function Page() {
   // Fetch data directly in Server Component
   const numOfDays = getNumOfDays();
-  const profileData = await getProfile();
+  // const profileData = "hello";
+  const profile = await getProfile();
   // console.log("profileData from firestore", profileData);
   // Forward fetched data to Client Component
-  return <HomePage numOfDays={numOfDays} profile={profileData} />;
+  return <HomePage numOfDays={numOfDays} profile={profile} />;
 }

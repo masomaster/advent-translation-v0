@@ -32,7 +32,8 @@
     "app/days/[id]/page.jsx",
     "lib/days.js",
     "app/page.tsx",
-    "app/auth/signup/page.jsx"
+    "app/auth/signup/page.jsx",
+    "app/dashboard/page.tsx"
   ],
   "exclude": ["node_modules"]
 }

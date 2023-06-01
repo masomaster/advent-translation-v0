@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import signUp from "../../../firebase/auth/signUp";
+import signUp from "../../../firebase/auth/signup";
 import { useRouter } from "next/navigation";
 import { collection, doc, setDoc, addDoc, getDocs } from "firebase/firestore";
 import addData from "../../../firebase/firestore/addData";
+import { useDispatch, useSelector } from "react-redux";
+import { setWholeProfile } from "../../../redux/profileSlice";
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
@@ -13,12 +15,13 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleForm = async (event) => {
     event.preventDefault();
 
     try {
-      const { credentials, error } = await signUp(
+      const profileDoc = await signUp(
         firstName,
         lastName,
         preferredTranslation,
@@ -44,7 +47,9 @@ export default function SignUp() {
       // );
       // console.log("newFirestoreProfile", newFirestoreProfile);
       // setWholeProfile -- that is, push new returned profile data to Redux store (or Context or whatever I'm using)
-      // dispatch(setWholeProfile(profile));
+      dispatch(setWholeProfile(profileDoc));
+
+      // I MUST SET A CONDITION HERE THAT IF THERE ISN'T A PROFILE OR profileDoc, THEN I HAVE TO FIND IT AND RETRIEVE THE DOC HERE.
 
       // navigate to dashboard
       return router.push("/dashboard");
@@ -103,7 +108,7 @@ export default function SignUp() {
             />
           </label>
           <label htmlFor="last-name">
-            <p>Email</p>
+            <p>Last Name</p>
             <input
               onChange={(e) => setLastName(e.target.value)}
               required

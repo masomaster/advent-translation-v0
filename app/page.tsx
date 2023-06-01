@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 export default function Page() {
   const { user } = useAuthContext();
-  // console.log("user", user);
+  console.log("user", user);
   const router = useRouter();
 
   if (user) router.push("/dashboard");
