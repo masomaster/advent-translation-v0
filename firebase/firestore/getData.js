@@ -3,7 +3,6 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 const db = getFirestore(firebase_app);
 
-// This is the solution from firebase docs:
 export default async function getDocument(collection, id) {
   const docRef = doc(db, collection, id);
   const docSnap = await getDoc(docRef);
@@ -15,20 +14,3 @@ export default async function getDocument(collection, id) {
     console.log("No such document!");
   }
 }
-// This is the solution from the freecodecamp page:
-/* const db = getFirestore(firebase_app);
-
-export default async function getDocument(collection, id) {
-  let docRef = doc(db, collection, id);
-
-  let result = null;
-  let error = null;
-
-  try {
-    result = await getDoc(docRef);
-  } catch (e) {
-    error = e;
-  }
-
-  return { result, error };
-} */

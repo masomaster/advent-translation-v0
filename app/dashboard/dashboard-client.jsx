@@ -2,29 +2,27 @@
 
 import { useEffect } from "react";
 import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 // import Image from "next/image";
 // import { Inter } from "next/font/google";
 // import styles from "@/styles/Home.module.css";
-import Link from "next/link";
-// import { GetStaticProps } from "next";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { incrementLatestDay, setWholeProfile } from "../../redux/profileSlice";
+import { incrementLatestDay } from "../../redux/profileSlice";
 import { useAuthContext } from "../../context/AuthContext";
-import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
-import { useRouter } from "next/navigation";
 import firebase_app from "../../firebase/config";
+import { getAuth, signOut } from "firebase/auth";
 
-export default function HomePage({ numOfDays }: { numOfDays: number }) {
+export default function HomePage({ numOfDays }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const auth = getAuth(firebase_app);
 
   // Get profile and user
-  const profileData = useSelector((state: RootState) => state.profile);
+  const profileData = useSelector((state) => state.profile);
   console.log("profileData", profileData);
-  const user = useAuthContext();
-  console.log("user", user);
+  const { user } = useAuthContext();
 
   // Creates an array of numbers from 1 to the user's latest translation day
   const numOfDaysToDisplay = Math.min(numOfDays, profileData.latestDay);
@@ -32,14 +30,12 @@ export default function HomePage({ numOfDays }: { numOfDays: number }) {
 
   // If no user, redirect to login
   useEffect(() => {
-    if (user == null) {
+    if (user === null) {
       router.push("/");
     }
   }, [user, router]);
 
   // If no profile, get profile
-  if (profileData == null) {
-  }
 
   // Functions
   function handleSignOut() {
