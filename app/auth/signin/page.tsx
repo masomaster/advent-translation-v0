@@ -1,24 +1,24 @@
 "use client";
 import React from "react";
-import signIn from "../../../firebase/auth/signIn";
+import signIn from "../../../firebase/auth/signin";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { setWholeProfile } from "../../../redux/profileSlice";
 
 export default function SignIn() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleForm = async (event: any) => {
     event.preventDefault();
-
-    const { result, error } = await signIn(email, password);
-
-    if (error) {
-      return console.log(error);
+    try {
+      const profileDoc = await signIn(email, password);
+      dispatch(setWholeProfile(profileDoc));
+    } catch (error) {
+      console.log(error);
     }
-
-    // else successful
-    console.log(result);
     return router.push("/dashboard");
   };
   return (

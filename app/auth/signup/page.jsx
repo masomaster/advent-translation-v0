@@ -3,11 +3,8 @@
 import { useState } from "react";
 import signUp from "../../../firebase/auth/signup";
 import { useRouter } from "next/navigation";
-import { collection, doc, setDoc, addDoc, getDocs } from "firebase/firestore";
-import addData from "../../../firebase/firestore/addData";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setWholeProfile } from "../../../redux/profileSlice";
-import { useAuthContext } from "../../../context/AuthContext";
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
@@ -15,12 +12,13 @@ export default function SignUp() {
   const [preferredTranslation, setPreferredTranslation] = useState("NIV");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const router = useRouter();
   const dispatch = useDispatch();
   const translationOptions = ["NIV", "NRSV", "ESV", "NASB"];
+
   const handleForm = async (event) => {
     event.preventDefault();
-
     try {
       const profileDoc = await signUp(
         firstName,
@@ -29,25 +27,6 @@ export default function SignUp() {
         email,
         password
       );
-      // console.log("new user firebase id: ", credentials.user.uid);
-
-      // create new profile object to push to db
-      // const profileData = {
-      //   firstName: firstName,
-      //   lastName: lastName,
-      //   // firebaseId: credentials.user.uid,
-      //   latestDay: 1,
-      //   preferredTranslation: "NRSV",
-      // };
-      // console.log(profileData);
-
-      // Save profile to db
-      // const { newFirestoreProfile, error2 } = await addData(
-      //   "profiles",
-      //   profileData
-      // );
-      // console.log("newFirestoreProfile", newFirestoreProfile);
-      // setWholeProfile -- that is, push new returned profile data to Redux store (or Context or whatever I'm using)
       dispatch(setWholeProfile(profileDoc));
 
       // I MUST SET A CONDITION HERE THAT IF THERE ISN'T A PROFILE OR profileDoc, THEN I HAVE TO FIND IT AND RETRIEVE THE DOC HERE.
@@ -58,38 +37,6 @@ export default function SignUp() {
       console.log(error);
       alert(error);
     }
-
-    // create new profile in db, including new firebase id
-    // const profile = await fetch(
-    //   "http://127.0.0.1:8090/api/collections/profiles/records",
-    //   {
-    //     method: "POST",
-    //     body: JSON.stringify(profileData),
-    //     headers: {
-    //       "Content-type": "application/json; charset=UTF-8",
-    //     },
-    //   }
-    // )
-    //   .then(function (response) {
-    //     return response.json();
-    //   })
-    //   .then(function (data) {
-    //     console.log(data);
-    //   })
-    //   .catch((error) => console.error("Error:", error));
-
-    // Switching from PocketBase to Firebase Cloud Firestore
-
-    // const querySnapshot = await getDocs(collection(db, "cities"));
-    // querySnapshot.forEach((doc) => {
-    //   // doc.data() is never undefined for query doc snapshots
-    //   console.log(doc.id, " => ", doc.data());
-    // });
-
-    // const newFirestoreProfile = await addDoc(
-    //   collection(db, "profiles"),
-    //   profileData
-    // );
   };
 
   return (

@@ -1,8 +1,5 @@
 import { getDayData, getNumOfDays } from "../../../lib/days";
 import { DayData } from "../../types";
-// import PocketBase from "pocketbase";
-// import DayPage from "./day";
-// const pb = new PocketBase("http://127.0.0.1:8090");
 
 // export async function getStaticProps({ params }: { params: { id: number } }) {
 //   const dayData = await getDayData(params.id);
@@ -39,11 +36,11 @@ import { DayData } from "../../types";
 //   }));
 // }
 async function getProfile() {
-  const res = await fetch(
-    "http://127.0.0.1:8090/api/collections/profiles/records/1urs7uguurwwzf7"
-  );
-  const data = await res.json();
-  return data;
+  // const res = await fetch(
+  //   "http://127.0.0.1:8090/api/collections/profiles/records/1urs7uguurwwzf7"
+  // );
+  // const data = await res.json();
+  // return data;
 }
 
 async function getTranslations(dayNum: number, profileID: string) {
@@ -54,14 +51,14 @@ async function getTranslations(dayNum: number, profileID: string) {
   //   });
   // console.log(record);
   console.log({ dayNum }, { profileID });
-  const res = await fetch(
-    `http://127.0.0.1:8090/api/collections/translations/records/?filter=%28profile%3D%27${profileID}%27%20%26%26%20day%3D%27${dayNum}%27%29`
-  );
-  const data = await res.json();
-  const translations = data.items[0];
+  // const res = await fetch(
+  //   `http://127.0.0.1:8090/api/collections/translations/records/?filter=%28profile%3D%27${profileID}%27%20%26%26%20day%3D%27${dayNum}%27%29`
+  // );
+  // const data = await res.json();
+  // const translations = data.items[0];
 
-  console.log({ translations });
-  return translations;
+  // console.log({ translations });
+  // return translations;
 }
 
 export default async function Page({ params }: any) {
