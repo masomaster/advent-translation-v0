@@ -24,6 +24,7 @@ export default function HomePage({
 }) {
   // Getting necessary variables
   const profileData = useSelector((state: RootState) => state.profile);
+  console.log("profileData", profileData);
   const dispatch = useDispatch();
   const { user } = useAuthContext();
   // console.log("user", user);
@@ -33,29 +34,28 @@ export default function HomePage({
   const daysArray = [...Array(numOfDaysToDisplay).keys()].map((n) => n + 1);
 
   const auth = getAuth(firebase_app);
-
-  let uid = null;
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-      uid = user.uid;
-      console.log("user: ", user);
-      // ...
-    } else {
-      // User is signed out
-      // ...
-      console.log("no user found");
-    }
-  });
+  // let uid = null;
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     // User is signed in, see docs for a list of available properties
+  //     // https://firebase.google.com/docs/reference/js/auth.user
+  //     uid = user.uid;
+  //     console.log("user: ", user);
+  //     // ...
+  //   } else {
+  //     // User is signed out
+  //     // ...
+  //     console.log("no user found");
+  //   }
+  // });
   // useEffects
   useEffect(() => {
     if (user == null) router.push("/");
   }, [user, router]);
 
-  useEffect(() => {
-    dispatch(setWholeProfile(profile));
-  }, [profile, dispatch]);
+  // useEffect(() => {
+  //   dispatch(setWholeProfile(profile));
+  // }, [profile, dispatch]);
 
   // Functions
   function handleSignOut() {
@@ -86,6 +86,10 @@ export default function HomePage({
           {profileData.firstName.length > 0 && `, ${profileData.firstName}`},
           you are on day {profileData.latestDay}!
         </h1>
+        <p>
+          {profileData.firstName} {profileData.lastName}, favorite translation:{" "}
+          {profileData.preferredTranslation}
+        </p>
         {daysArray.map((n) => (
           <div className="day-link" key={n}>
             <Link href={`/days/${n}`} key={n}>

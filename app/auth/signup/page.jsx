@@ -7,6 +7,7 @@ import { collection, doc, setDoc, addDoc, getDocs } from "firebase/firestore";
 import addData from "../../../firebase/firestore/addData";
 import { useDispatch, useSelector } from "react-redux";
 import { setWholeProfile } from "../../../redux/profileSlice";
+import { useAuthContext } from "../../../context/AuthContext";
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
@@ -16,7 +17,7 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
-
+  const translationOptions = ["NIV", "NRSV", "ESV", "NASB"];
   const handleForm = async (event) => {
     event.preventDefault();
 
@@ -117,6 +118,22 @@ export default function SignUp() {
               id="last-name"
               placeholder="Nguyen"
             />
+          </label>
+          <label htmlFor="preferred-translation">
+            <p>Preferred Translation</p>
+            <select
+              type="preferred-translation"
+              name="preferredTranslation"
+              id="preferred-translation"
+              value={preferredTranslation}
+              onChange={(e) => setPreferredTranslation(e.target.value)}
+            >
+              {translationOptions.map((translation, idx) => (
+                <option key={idx} value={translation}>
+                  {translation}
+                </option>
+              ))}
+            </select>
           </label>
           <label htmlFor="email">
             <p>Email</p>
