@@ -16,30 +16,30 @@ import { useRouter } from "next/navigation";
 import firebase_app from "../../firebase/config";
 
 export default function HomePage({ numOfDays }: { numOfDays: number }) {
-  // Getting necessary variables
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const auth = getAuth(firebase_app);
+
+  // Get profile and user
   const profileData = useSelector((state: RootState) => state.profile);
   console.log("profileData", profileData);
-  const dispatch = useDispatch();
-  const { user } = useAuthContext();
+  const user = useAuthContext();
   console.log("user", user);
-  const router = useRouter();
 
   // Creates an array of numbers from 1 to the user's latest translation day
   const numOfDaysToDisplay = Math.min(numOfDays, profileData.latestDay);
   const daysArray = [...Array(numOfDaysToDisplay).keys()].map((n) => n + 1);
 
-  const auth = getAuth(firebase_app);
-
-  // useEffects
+  // If no user, redirect to login
   useEffect(() => {
     if (user == null) {
       router.push("/");
     }
   }, [user, router]);
 
-  // useEffect(() => {
-  //   dispatch(setWholeProfile(profile));
-  // }, [profile, dispatch]);
+  // If no profile, get profile
+  if (profileData == null) {
+  }
 
   // Functions
   function handleSignOut() {

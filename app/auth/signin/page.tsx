@@ -33,7 +33,7 @@ export default function SignIn() {
               required
               type="email"
               name="email"
-              id="email"
+              id="SignInEmail"
               placeholder="example@mail.com"
             />
           </label>
@@ -44,7 +44,7 @@ export default function SignIn() {
               required
               type="password"
               name="password"
-              id="password"
+              id="SignInPassword"
               placeholder="password"
             />
           </label>
