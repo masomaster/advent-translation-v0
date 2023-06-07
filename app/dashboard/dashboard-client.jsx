@@ -13,6 +13,7 @@ import { incrementLatestDay } from "../../redux/profileSlice";
 import { useAuthContext } from "../../context/AuthContext";
 import firebase_app from "../../firebase/config";
 import { getAuth, signOut } from "firebase/auth";
+import getDocument from "../../firebase/firestore/getData";
 
 export default function HomePage({ numOfDays }) {
   const dispatch = useDispatch();
@@ -36,8 +37,29 @@ export default function HomePage({ numOfDays }) {
   }, [user, router]);
 
   // If no profile, get profile
+  useEffect(() => {
+    if (profileData.firstName === "") {
+      getProfile();
+    }
+  });
+  // getProfile();
+
+  // NOTE TO SELF: I NOW CAN GET PROFILE DATA ON THE FRONT END IF IT ISN'T PRESENT.
+  // I NEED TO SORT OUT HOW I'M GOING TO SAVE IT AS STATE. AND CLEAN UP A BUNCH OF UNNECESSARY CRAP.
+
+  // Unnecessary now:
+  // const getToken = async () => {
+  //   const token = await user.getIdToken();
+  //   console.log(token);
+  // };
+  // getToken();
 
   // Functions
+  const getProfile = async () => {
+    const profile = await getDocument("profiles", user.uid);
+    console.log(profile);
+  };
+
   function handleSignOut() {
     signOut(auth)
       .then(() => {
