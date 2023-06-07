@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  firstName: "",
-  lastName: "",
+  firstName: null,
+  lastName: null,
   latestDay: 1,
-  preferredTranslation: "",
+  preferredTranslation: "NIV",
 };
 
 export const profileSlice = createSlice({

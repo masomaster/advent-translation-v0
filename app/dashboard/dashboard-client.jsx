@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 // import styles from "@/styles/Home.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { incrementLatestDay } from "../../redux/profileSlice";
+import { setWholeProfile, incrementLatestDay } from "../../redux/profileSlice";
 import { useAuthContext } from "../../context/AuthContext";
 import firebase_app from "../../firebase/config";
 import { getAuth, signOut } from "firebase/auth";
@@ -19,15 +19,12 @@ export default function HomePage({ numOfDays }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const auth = getAuth(firebase_app);
+  const [profile, setProfile] = useState(null);
 
-  // Get profile and user
-  const profileData = useSelector((state) => state.profile);
-  console.log("profileData", profileData);
+  // Get user and profile
   const { user } = useAuthContext();
-
-  // Creates an array of numbers from 1 to the user's latest translation day
-  const numOfDaysToDisplay = Math.min(numOfDays, profileData.latestDay);
-  const daysArray = [...Array(numOfDaysToDisplay).keys()].map((n) => n + 1);
+  let profileData = useSelector((state) => state.profile);
+  console.log("profileData", profileData);
 
   // If no user, redirect to login
   useEffect(() => {
@@ -38,10 +35,18 @@ export default function HomePage({ numOfDays }) {
 
   // If no profile, get profile
   useEffect(() => {
-    if (profileData.firstName === "") {
-      getProfile();
+    if (profileData.firstName === null) {
+      // I want to move this function to the backend, probably a file /redux. It should return the profile data.
+      const getProfile = async () => {
+        const profile2 = await getDocument("profiles", user.uid);
+        console.log(profile2);
+        setProfile(profile2);
+        dispatch(setWholeProfile(profile2));
+        return profile2;
+      };
+      const profile = getProfile();
     }
-  });
+  }, [dispatch, profileData.firstName, user.uid]);
   // getProfile();
 
   // NOTE TO SELF: I NOW CAN GET PROFILE DATA ON THE FRONT END IF IT ISN'T PRESENT.
@@ -54,12 +59,11 @@ export default function HomePage({ numOfDays }) {
   // };
   // getToken();
 
-  // Functions
-  const getProfile = async () => {
-    const profile = await getDocument("profiles", user.uid);
-    console.log(profile);
-  };
+  // Creates an array of numbers from 1 to the user's latest translation day
+  const numOfDaysToDisplay = Math.min(numOfDays, profileData.latestDay);
+  const daysArray = [...Array(numOfDaysToDisplay).keys()].map((n) => n + 1);
 
+  // Functions
   function handleSignOut() {
     signOut(auth)
       .then(() => {
@@ -85,7 +89,7 @@ export default function HomePage({ numOfDays }) {
       <div>
         <h1>
           Welcome to Advent Translation
-          {profileData.firstName.length > 0 && `, ${profileData.firstName}`},
+          {profileData.firstName?.length > 0 && `, ${profileData.firstName}`},
           you are on day {profileData.latestDay}!
         </h1>
         <p>
