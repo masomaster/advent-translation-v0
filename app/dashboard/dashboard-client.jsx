@@ -46,7 +46,7 @@ export default function HomePage({ numOfDays }) {
       };
       const profile = getProfile();
     }
-  }, [dispatch, profileData.firstName, user.uid]);
+  });
   // getProfile();
 
   // NOTE TO SELF: I NOW CAN GET PROFILE DATA ON THE FRONT END IF IT ISN'T PRESENT.
