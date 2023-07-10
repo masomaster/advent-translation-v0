@@ -69,7 +69,7 @@ export default function HomePage({ numOfDays }) {
       </Head>
       <div>
         <h1>
-          Welcome to Advent Translation
+          Howdy! Welcome to Advent Translation
           {profileData.firstName?.length > 0 && `, ${profileData.firstName}`},
           you are on day {profileData.latestDay}!
         </h1>
