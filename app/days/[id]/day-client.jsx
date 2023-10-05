@@ -22,6 +22,11 @@ export default async function DayClient({ dayData }) {
     }
   });
 
+  if (!dayData) {
+    return <div>Loading...</div>;
+  }
+  const { dayNumber, hebrew, hebrewVerse, greek, greekVerse } = dayData;
+
   return (
     <div>
       <h1>Day {dayData.dayNumber}</h1>
